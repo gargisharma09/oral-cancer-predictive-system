@@ -1,5 +1,7 @@
-1. Pandas 
-2.Numpy 
-3.Matplotlib.pyplot
-4.Seaborn
-5.Sklearn
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+joblib
+streamlit
