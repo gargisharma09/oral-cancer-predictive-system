@@ -1,0 +1,19 @@
+# Python/Jupyter typical gitignore
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+venv/
+.venv/
+env/
+.env
+
+.ipynb_checkpoints/
+*.joblib
+*.pkl
+
+.streamlit/secrets.toml
+.DS_Store
+Thumbs.db

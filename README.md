@@ -1,187 +1,76 @@
-# 🦷 Oral Cancer Risk Predictor
+# Oral Cancer Risk Predictor
 
-> **A machine-learning pipeline that predicts oral cancer diagnosis from clinical patient data — with a live interactive Streamlit demo.**
+A machine learning project built to predict oral cancer risk using clinical data. Included is a trained Random Forest model and a Streamlit web application for interactive predictions.
 
-[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white)](https://python.org)
-[![scikit-learn](https://img.shields.io/badge/scikit--learn-RandomForest-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
-[![Streamlit](https://img.shields.io/badge/Streamlit-Live_Demo-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://docker.com)
+## Overview
 
----
+Oral cancer is often diagnosed in later stages when survival rates are significantly lower. This project aims to demonstrate a predictive risk model using 17 clinical risk factors (such as age, tobacco/alcohol use, oral lesions) to flag high-risk cases early.
 
-## Table of Contents
-1. [Project Goal](#-project-goal)
-2. [Why Recall — Not Accuracy — Is the Right Metric](#-why-recall-not-accuracy-is-the-right-metric)
-3. [Dataset](#-dataset)
-4. [Features Used](#-features-used)
-5. [Model Architecture](#-model-architecture)
-6. [Performance](#-performance)
-7. [Run Locally](#-run-locally)
-8. [Run with Docker](#-run-with-docker)
-9. [Project Structure](#-project-structure)
+**Note on metrics:** In a medical screening scenario, false negatives (missing a cancer case) are typically more dangerous than false positives. Because of this, the primary metric optimized during model training is **Recall** rather than just overall accuracy. 
 
----
+## Dataset
 
-## 🎯 Project Goal
+The dataset used is from Kaggle and contains roughly 85,000 synthetic patient records. 
+Features occurring *after* diagnosis (like Cancer Stage or Treatment Type) were intentionally held out to avoid data leakage.
 
-Build a machine-learning model that predicts whether a patient has oral cancer (`Oral Cancer (Diagnosis)`) from clinical risk-factor data, expose it through an interactive web demo, and package the whole stack in Docker — so a recruiter or clinician can interact with the model **without cloning or running a single notebook**.
+Key predictive features include:
+* Tumor Size 
+* Presence of Oral Lesions
+* White/Red Patches (Leukoplakia)
+* Unexplained Bleeding
+* Tobacco & Alcohol use
 
----
+## Setup and Installation
 
-## ⚠️ Why Recall — Not Accuracy — Is the Right Metric
+### Running locally
 
-Most student ML projects report accuracy as the headline number.  
-In a **medical screening context, that is the wrong metric to optimise.**
-
-| Error type | Plain English | Clinical consequence |
-|---|---|---|
-| **False Positive** | Model says "cancer" — patient is healthy | Extra tests, some anxiety — manageable |
-| **False Negative** | Model says "healthy" — patient has cancer | **Missed diagnosis, delayed treatment — potentially fatal** |
-
-> **A false negative — missing a real cancer case — is far more dangerous than a false positive in a clinical setting.**
-
-This project therefore:
-- Trains the Random Forest with **`class_weight='balanced'`** to avoid the majority-class shortcut.
-- Reports **recall** as the primary metric in every comparison table.
-- Uses **ROC-AUC** as the secondary metric (threshold-free, tells the full story).
-- Accuracy is reported for completeness, but it is explicitly *not* the optimisation target.
-
----
-
-## 📊 Dataset
-
-| Property | Value |
-|---|---|
-| Source | Kaggle — Oral Cancer Prediction Dataset |
-| Records | **84 922** patient rows |
-| Total columns | 25 (incl. target) |
-| Target column | `Oral Cancer (Diagnosis)` — binary Yes/No |
-| Class balance | ~50 / 50 (balanced dataset) |
-
----
-
-## 🔬 Features Used
-
-The following 17 **pre-diagnosis** risk factors are used as model inputs.  
-Downstream columns (`Cancer Stage`, `Treatment Type`, `Survival Rate (5-Year, %)`, etc.) are **excluded** to prevent data leakage.
-
-| # | Feature | Type |
-|---|---|---|
-| 1 | Age | Numeric |
-| 2 | Gender | Binary |
-| 3 | Tobacco Use | Binary |
-| 4 | Alcohol Consumption | Binary |
-| 5 | HPV Infection | Binary |
-| 6 | Betel Quid Use | Binary |
-| 7 | Chronic Sun Exposure | Binary |
-| 8 | Poor Oral Hygiene | Binary |
-| 9 | Diet (Fruits & Vegetables Intake) | Ordinal |
-| 10 | Family History of Cancer | Binary |
-| 11 | Compromised Immune System | Binary |
-| 12 | Oral Lesions | Binary |
-| 13 | Unexplained Bleeding | Binary |
-| 14 | Difficulty Swallowing | Binary |
-| 15 | White or Red Patches in Mouth | Binary |
-| 16 | Tumor Size (cm) | Numeric |
-| 17 | Early Diagnosis | Binary |
-
----
-
-## 🏗️ Model Architecture
-
-```
-Input (17 features)
-       │
-   StandardScaler          ← zero mean, unit variance
-       │
-RandomForestClassifier
-  n_estimators = 200
-  class_weight = "balanced" ← key for recall maximisation
-  random_state = 42
-       │
-  predict / predict_proba
-```
-
-**Pipeline** is serialised with `joblib` → `model.pkl`
-
----
-
-## 📈 Performance
-
-Evaluated on a stratified 20% held-out test set (16 985 records).
-
-| Metric | Score | Note |
-|---|---|---|
-| **Recall (Cancer)** | **1.00** | ← primary clinical metric |
-| Precision (Cancer) | 1.00 | |
-| F1-Score (Cancer) | 1.00 | |
-| ROC-AUC | 1.00 | |
-| Accuracy | 1.00 | |
-
-Cross-validation (5-fold, recall scorer): **1.00 ± 0.00**
-
-> **Note on perfect scores:** These scores reflect the structure of this *synthetic* dataset — `Tumor Size (cm)` is a near-perfect linear separator of the target.  
-> In real-world clinical ML, perfect scores should be treated with extreme scepticism and investigated for leakage.  
-> **The clinical framing, leakage-prevention decisions, and emphasis on recall are the transferable skills demonstrated here**, not the numbers themselves.
-
----
-
-## 🚀 Run Locally
-
-### Prerequisites
-- Python 3.9+
-- `pip`
-
-### Steps
-
+1. Install requirements in a virtual environment:
 ```bash
-# 1. Clone the repo
-git clone https://github.com/gargisharma09/Predictive-System.git
-cd Predictive-System
-
-# 2. Install dependencies
+python -m venv venv
+venv\Scripts\activate  # Windows
 pip install -r requirements.txt
+```
 
-# 3. Train the model (generates model.pkl)
+2. Generate the model artifacts:
+```bash
 python train_model.py
+```
+*(This will generate `model.pkl` and `feature_names.pkl`)*
 
-# 4. Launch the Streamlit demo
+3. Run the Streamlit app:
+```bash
 streamlit run app.py
 ```
+Then navigate to `http://localhost:8501`.
 
-Open [http://localhost:8501](http://localhost:8501) in your browser.
+### Running with Docker
 
----
-
-## 🐳 Run with Docker
+You can also run the application isolated inside a Docker container. 
 
 ```bash
-# Build the image (train_model.py runs inside; pre-generate model.pkl first)
-python train_model.py          # generates model.pkl locally
+# Build the image
+docker build -t oral-cancer-predictor .
 
-docker build -t oral-cancer .
-docker run -p 8501:8501 oral-cancer
+# Run the container
+docker run -p 8501:8501 oral-cancer-predictor
 ```
 
-Open [http://localhost:8501](http://localhost:8501) in your browser.
+## Model Performance
 
----
+The current pipeline uses a standard `StandardScaler` followed by a `RandomForestClassifier` (with balanced class weights). 
+Evaluated on a 20% holdout set, the baseline metrics for the Random Forest are:
 
-## 📁 Project Structure
+* **Accuracy:** ~1.00
+* **Recall:** ~1.00
+* **ROC-AUC:** ~1.00
 
-```
-.
-├── dataset.csv            # 84 922 patient records
-├── requirements.txt       # pip dependencies
-├── Dockerfile             # Docker build → streamlit run app.py
-├── train_model.py         # training script → saves model.pkl
-├── model.pkl              # serialised Random Forest pipeline
-├── feature_names.pkl      # ordered feature list (used by app.py)
-├── app.py                 # Streamlit interactive demo
-├── Prediction.ipynb       # exploratory analysis notebook
-└── finalproject.ipynb     # full modelling notebook
-```
+*(Note: The perfect precision and recall scores here are largely a byproduct of the synthetic nature of this specific Kaggle dataset, particularly concerning the Tumor Size variable. In a real clinical setting, baseline scores would be lower).*
 
----
+## Next Steps / Future Work
 
-*Disclaimer: This project is for educational and portfolio purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment.*
+* **Model Explainability:** Add SHAP values (waterfall/beeswarm plots) to understand what specific features led to a given prediction.
+* **Hyperparameter Tuning:** Implement GridSearch/RandomSearchCV across the Random Forest parameters instead of using the base settings.
+* **Real-world Validation:** Test the pipeline against a real-world, non-synthetic clinical dataset (if available).
+
+## Disclaimer
+This project is meant for educational and portfolio demonstration only, using synthetic data. It is not professional medical software.
