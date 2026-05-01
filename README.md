@@ -1,5 +1,6 @@
 # 🦷 OralGuard AI — Oral Cancer Predictive System
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://oral-cancer-predictive-system.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.2%2B-F7931E?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.28%2B-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io)
