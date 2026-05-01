@@ -82,7 +82,7 @@ oral-cancer-predictive-system/
 ├── model.pkl               # Trained pipeline (generated)
 ├── feature_names.pkl       # Feature name list (generated)
 ├── Prediction.ipynb        # EDA & modelling notebook
-└── finalproject.ipynb      # Extended analysis notebook
+├── model.ipynb             # Extended analysis notebook
 ```
 
 ---
