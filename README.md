@@ -81,8 +81,8 @@ oral-cancer-predictive-system/
 ├── dataset.csv             # Source dataset (Kaggle)
 ├── model.pkl               # Trained pipeline (generated)
 ├── feature_names.pkl       # Feature name list (generated)
-├── Prediction.ipynb        # EDA & modelling notebook
-├── model.ipynb             # Extended analysis notebook
+├── 01_eda_and_preprocessing.ipynb       # EDA & preprocessing notebook
+├── 02_model_training_evaluation.ipynb   # Model training & evaluation notebook
 ```
 
 ---
