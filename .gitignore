@@ -1,19 +1,26 @@
-# Python/Jupyter typical gitignore
-
+# Python
 __pycache__/
+*.pyc
 *.py[cod]
 *$py.class
 *.so
 
+# Environments
+.env
 venv/
 .venv/
 env/
-.env
 
-.ipynb_checkpoints/
-*.joblib
+# Model artifacts
 *.pkl
+*.joblib
 
-.streamlit/secrets.toml
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
 .DS_Store
 Thumbs.db
+
+# Streamlit secrets
+.streamlit/secrets.toml
