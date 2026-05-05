@@ -183,6 +183,8 @@ Metrics computed on a **held-out 20% test set**:
 
 > *Note: The model prioritises **Recall** to minimise false negatives — a missed cancer diagnosis is far more dangerous than a false alarm.*
 
+> ⚠️ **On perfect metrics:** Perfect scores reflect the linearly-separable structure of this synthetic dataset — the target label is a near-deterministic function of a small number of features (e.g. Tumor Size). Real clinical data would yield lower but more clinically meaningful results, and would require substantially richer feature engineering, larger cohorts, and external validation before any deployment consideration.
+
 ---
 
 ## Roadmap
