@@ -1,7 +1,18 @@
-pandas
-numpy
-matplotlib
-seaborn
-scikit-learn
-streamlit
-joblib
+# Core data science
+pandas>=1.5,<3.0
+numpy>=1.23,<2.0
+
+# Machine learning
+scikit-learn>=1.2,<2.0
+xgboost>=1.7
+
+# Visualisation
+matplotlib>=3.6
+seaborn>=0.12
+plotly>=5.10
+
+# App
+streamlit>=1.28
+
+# Serialisation
+joblib>=1.2

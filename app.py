@@ -160,19 +160,27 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ── Load model artefacts ───────────────────────────────────────────────────────
-BASE_DIR = os.path.dirname(__file__)
+# ── Load model artefacts (auto-train if missing) ───────────────────────────────
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH    = os.path.join(BASE_DIR, "model.pkl")
+FEATURES_PATH = os.path.join(BASE_DIR, "feature_names.pkl")
 
 @st.cache_resource
 def load_model():
-    model         = joblib.load(os.path.join(BASE_DIR, "model.pkl"))
-    feature_names = joblib.load(os.path.join(BASE_DIR, "feature_names.pkl"))
+    """Load the trained pipeline.  If pkl files are absent, train on-the-fly."""
+    if not os.path.exists(MODEL_PATH) or not os.path.exists(FEATURES_PATH):
+        import subprocess, sys
+        train_script = os.path.join(BASE_DIR, "train_model.py")
+        with st.spinner("⏳ First-run setup: training model (takes ~60 s)…"):
+            subprocess.run([sys.executable, train_script], check=True)
+    model         = joblib.load(MODEL_PATH)
+    feature_names = joblib.load(FEATURES_PATH)
     return model, feature_names
 
 try:
     pipeline, FEATURE_NAMES = load_model()
     model_loaded = True
-except FileNotFoundError:
+except Exception:
     model_loaded = False
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
