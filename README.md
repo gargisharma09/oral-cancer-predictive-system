@@ -151,6 +151,25 @@ Open [http://localhost:8501](http://localhost:8501) in your browser.
 
 ---
 
+## Model Comparison
+
+Three candidate classifiers evaluated on the **held-out 20 % test set** (84,922-row synthetic dataset).  
+Primary metric is **Recall** — minimising false negatives is critical in a cancer-screening context.
+
+| Model | Accuracy | Precision | Recall | F1-Score | ROC-AUC |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Logistic Regression | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| **Random Forest** ✅ | **1.00** | **1.00** | **1.00** | **1.00** | **1.00** |
+| XGBoost | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+
+> **Why Random Forest?** All three models achieve perfect scores on this synthetic dataset (the label  
+> is a near-deterministic function of the features). Random Forest was selected for production because  
+> it provides native feature importances for clinical interpretability, requires no extra dependency  
+> beyond scikit-learn, and its `class_weight='balanced'` setting directly targets Recall on the  
+> minority (cancer) class. XGBoost is a strong alternative; Logistic Regression serves as the linear baseline.
+
+---
+
 ## Model Performance
 
 Metrics computed on a **held-out 20% test set**:
